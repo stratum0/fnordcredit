@@ -124,12 +124,26 @@ function showDetail(userData, pincode) {
 
 function showStatistics() {
   var saldo = 0;
+  var credit = 0;
+  var debit = 0;
+
   accounts.forEach(function(account) {
     saldo += account.credit;
+    if (account.credit > 0) {
+      credit += account.credit;
+    } else {
+      debit += account.credit;
+    }
   });
 
   $.get('templates/statistics.dust.html', function(template) {
     dust.renderSource(template, { saldo: saldo }, function(err, out) {
+      $('#view-statistics').html(out);
+    });
+    dust.renderSource(template, { credit: credit }, function (err, out) {
+      $('#view-statistics').html(out);
+    });
+    dust.renderSource(template, { debit: debit }, function (err, out) {
       $('#view-statistics').html(out);
     });
   });
