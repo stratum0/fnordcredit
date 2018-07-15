@@ -4,18 +4,11 @@ import TransactionModel from '../Model/TransactionModel';
 import UserModel from '../Model/UserModel';
 import winston from 'winston';
 
-export async function deleteUser(userId: number, force: boolean = false) {
-  const user = await getUser(userId);
-  if (!force && user.get('credit') !== 0) {
-    throw new Error('Cannot delete User unless 0 credit');
-  }
-  await user.destroy();
-}
-
 export async function updateToken(userId: number, newToken: string): Promise<UserModel> {
   const user = await UserModel.where({
     id: userId,
   }).fetch();
+
   if (user) {
     return user.save({
       token: newToken,
@@ -32,6 +25,7 @@ export function getAllUsers() {
 
 export async function checkUserPin(userId: number, pincode: string) {
   const user = await UserModel.where({ id: userId }).fetch();
+
   if (!user) {
     winston.error(`Couldn't check PIN for user ${userId}`);
     throw new Error(`Couldn't check PIN for user ${userId}`);
@@ -50,6 +44,7 @@ export async function addUser(username: string) {
     throw new Error('Please enter a name');
   }
   const existingUser = await UserModel.where({ name: username }).fetch();
+
   if (existingUser) {
     winston.error(`Couldn't save user ${username}, already exists`);
     throw new Error('User exists already.');
@@ -60,6 +55,7 @@ export async function addUser(username: string) {
     lastchanged: new Date(),
     name: username,
   }).save({}, { method: 'insert' });
+
   winston.info(`[addUser] New user ${username} created`);
 
   return user;
@@ -77,9 +73,11 @@ export async function updateCredit(user: User, delta: number, description: strin
     time: new Date(),
     description,
   });
+
   await transaction.save({}, { method: 'insert' });
 
   let dbUser = await UserModel.where({ id: user.id }).fetch();
+
   if (!dbUser) {
     winston.error(`Couldn't save transaction for user ${user.name}`);
     throw new Error(`failed to update Credit for user ${user.name}`);
@@ -101,9 +99,11 @@ export async function getUserByToken(token: string) {
   const user = await UserModel.where({
     token,
   }).fetch();
+
   if (!user) {
     throw new Error('User not found');
   }
+
   return user;
 }
 
@@ -111,10 +111,21 @@ export async function getUser(userId: number) {
   const user = await UserModel.where({
     id: userId,
   }).fetch();
+
   if (!user) {
     throw new Error('User not found');
   }
+
   return user;
+}
+
+export async function deleteUser(userId: number, force: boolean = false) {
+  const user = await getUser(userId);
+
+  if (!force && user.get('credit') !== 0) {
+    throw new Error('Cannot delete User unless 0 credit');
+  }
+  await user.destroy();
 }
 
 export async function renameUser(
@@ -129,6 +140,7 @@ export async function renameUser(
   const dbUser = await UserModel.where({
     id: user.id,
   }).fetch();
+
   if (!dbUser) {
     winston.error(`Couldn't save user ${newname}`);
     throw new Error('Couldnt rename user');
@@ -139,6 +151,7 @@ export async function renameUser(
   await dbUser.save({
     name: newname,
   });
+
   return dbUser;
 }
 
@@ -149,6 +162,7 @@ export async function updatePin(userId: number, newPincode: string) {
     hashedPincode = passwordHash.generate(newPincode);
   }
   const user = await UserModel.where({ id: userId }).fetch();
+
   if (!user) {
     throw new Error('User not found');
   }

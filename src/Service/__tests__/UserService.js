@@ -13,6 +13,7 @@ describe('UserService', () => {
 
   it('update Pin', async () => {
     const pin = '0000';
+
     await updatePin(user.id, pin);
     user = await getUser(user.id);
     expect(passwordHash.verify(pin, user.get('pincode'))).toBe(true);
@@ -22,6 +23,7 @@ describe('UserService', () => {
     user = await getUser(user.id);
     user = await renameUser(user.serialize(), 'testNew');
     const dbUser = await getUser(user.id);
+
     expect(user).toBeDefined();
     expect(dbUser).toBeDefined();
     expect(user.get('name')).toBe(dbUser.get('name'));
@@ -46,6 +48,7 @@ describe('UserService', () => {
     user = await updateCredit(user.serialize(), 1, '1');
     expect(user.get('credit')).toBe(1);
     const dbUser = await getUser(user.id);
+
     expect(user.get('credit')).toBe(dbUser.get('credit'));
   });
 
@@ -53,6 +56,7 @@ describe('UserService', () => {
     user = await updateCredit(user.serialize(), -2, '-2');
     expect(user.get('credit')).toBe(-1);
     const dbUser = await getUser(user.id);
+
     expect(user.get('credit')).toBe(dbUser.get('credit'));
   });
 

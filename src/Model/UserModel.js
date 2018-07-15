@@ -11,11 +11,13 @@ export default class UserModel extends BaseModel<User> {
     attributes.debt_hard_limit = attributes.debtHardLimit;
     delete attributes.debtAllowed;
     delete attributes.debtHardLimit;
+
     return attributes;
   }
   parse(attributes: Object) {
     attributes.debtAllowed = attributes.debt_allowed;
     attributes.debtHardLimit = attributes.debt_hard_limit;
+
     return attributes;
   }
 }

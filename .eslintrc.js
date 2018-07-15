@@ -1,5 +1,5 @@
 module.exports = {
-  extends: 'marudor/noReact',
+  extends: ['joblift/2space', 'joblift/flowtype'],
   env: {
     node: true,
     jest: true,
@@ -9,18 +9,5 @@ module.exports = {
     bookshelf: false,
     koa: false,
     broadcast: false,
-  },
-  rules: {
-    'comma-dangle': [
-      2,
-      {
-        arrays: 'always-multiline',
-        objects: 'always-multiline',
-        imports: 'always-multiline',
-        exports: 'always-multiline',
-        functions: 'never',
-      },
-    ],
-    'space-before-function-paren': 0,
   },
 };

@@ -10,6 +10,7 @@ export default function(server: Server) {
     compression: true,
     transformer: 'engine.io',
   });
+
   primus.plugin('emit', require('primus-emit'));
 
   router.get('/sockets.js', ctx => {
@@ -17,7 +18,7 @@ export default function(server: Server) {
   });
   koa.use(router.routes());
 
-  global.broadcast = function(...args) {
+  global.broadcast = (...args) => {
     primus.forEach(s => s.emit(...args));
   };
 

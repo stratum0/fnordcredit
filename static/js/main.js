@@ -150,7 +150,7 @@ function showStatistics() {
 }
 
 function getAllUsers() {
-  $('#accounts').empty();
+  // $('#accounts').empty();
 
   accounts.sort(function(a, b) {
     switch (sortby) {
