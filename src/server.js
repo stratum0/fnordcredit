@@ -8,6 +8,7 @@ winston.add(winston.transports.File, { filename: 'credit.log', json: false });
 
 function serverStart() {
   let server = require('http').createServer(koa.callback());
+
   require('./primusInit').default(server);
 
   server = server.listen(8000, undefined, undefined, () => {
@@ -16,6 +17,7 @@ function serverStart() {
 
   process.on('SIGTERM', () => {
     winston.info('Server shutting down. Good bye!');
+    // eslint-disable-next-line no-process-exit
     process.exit();
   });
 }
@@ -23,5 +25,6 @@ function serverStart() {
 serverStart();
 
 if (process.argv.includes('--test', 2)) {
+  // eslint-disable-next-line no-process-exit
   process.exit(0);
 }

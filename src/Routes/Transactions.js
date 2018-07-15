@@ -13,6 +13,7 @@ router
   .get('/:id', async ctx => {
     const { id }: { id: number } = ctx.params;
     const pincode = ctx.request.header['X-User-Pincode'];
+
     await checkUserPin(id, pincode);
     ctx.body = await getUserTransactions(id);
   });
